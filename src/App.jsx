@@ -1,5 +1,120 @@
 import { useState } from "react";
 
+// ── RESPONSIVE STYLES ─────────────────────────────────────────────────────────
+const GlobalStyles = () => (
+  <style>{`
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', 'Segoe UI', sans-serif; background: #f0f4f8; }
+
+    /* Desktop navbar */
+    .desk-nav {
+      display: none;
+      position: fixed; top: 0; left: 0; right: 0;
+      background: #1E3A5F; z-index: 1000;
+      padding: 0 40px; height: 64px;
+      align-items: center; justify-content: space-between;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    }
+    .desk-nav-links { display: flex; gap: 32px; align-items: center; }
+    .desk-nav-link { color: #93C5FD; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; transition: color 0.2s; }
+    .desk-nav-link:hover { color: #fff; }
+    .desk-nav-btn { background: #2563EB; color: #fff; border: none; border-radius: 8px; padding: 9px 20px; font-size: 14px; font-weight: 700; cursor: pointer; }
+    .desk-nav-btn:hover { background: #1d4ed8; }
+
+    /* Desktop hero */
+    .desk-hero {
+      display: none;
+      background: linear-gradient(135deg, #1E3A5F 0%, #2563EB 100%);
+      padding: 120px 40px 60px;
+      text-align: center; color: #fff;
+    }
+    .desk-hero h1 { font-size: 48px; font-weight: 900; margin-bottom: 16px; }
+    .desk-hero p { font-size: 20px; opacity: 0.85; margin-bottom: 32px; }
+    .desk-hero-search {
+      display: flex; max-width: 600px; margin: 0 auto;
+      background: #fff; border-radius: 14px; padding: 8px 8px 8px 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+    .desk-hero-search input { flex: 1; border: none; outline: none; font-size: 16px; color: #111; background: transparent; }
+    .desk-hero-search button { background: #2563EB; color: #fff; border: none; border-radius: 10px; padding: 12px 24px; font-size: 15px; font-weight: 700; cursor: pointer; }
+
+    /* Desktop grid */
+    .desk-grid { display: none; max-width: 1200px; margin: 0 auto; padding: 40px; }
+    .desk-grid-title { font-size: 28px; font-weight: 800; color: #111; margin-bottom: 6px; }
+    .desk-grid-sub { font-size: 15px; color: #888; margin-bottom: 28px; }
+    .desk-cat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 48px; }
+    .desk-cat-card {
+      border-radius: 16px; overflow: hidden; position: relative;
+      height: 200px; cursor: pointer; background-size: cover; background-position: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .desk-cat-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.15); }
+    .desk-cat-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.1) 100%);
+      display: flex; flex-direction: column; justify-content: flex-end; padding: 16px;
+    }
+    .desk-cat-name { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+    .desk-cat-desc { font-size: 12px; color: rgba(255,255,255,0.8); }
+
+    /* Desktop provider grid */
+    .desk-prov-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .desk-prov-card {
+      background: #fff; border-radius: 16px; padding: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .desk-prov-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+
+    /* Desktop two-col layout for inner pages */
+    .desk-two-col { display: none; max-width: 1200px; margin: 80px auto 0; padding: 40px; gap: 32px; }
+    .desk-sidebar { width: 300px; flex-shrink: 0; }
+    .desk-main { flex: 1; }
+
+    /* Desktop WA section */
+    .desk-wa-section { display: none; background: #1E3A5F; padding: 60px 40px; text-align: center; }
+    .desk-wa-btns { display: flex; gap: 16px; justify-content: center; margin-top: 24px; flex-wrap: wrap; }
+
+    /* Desktop footer */
+    .desk-footer { display: none; background: #111; color: #aaa; padding: 40px; text-align: center; font-size: 13px; }
+
+    /* Mobile bottom nav */
+    .mob-nav { display: flex; }
+
+    /* ── RESPONSIVE BREAKPOINTS ── */
+    @media (min-width: 768px) {
+      .desk-nav { display: flex; }
+      .desk-hero { display: block; }
+      .desk-grid { display: block; }
+      .desk-wa-section { display: block; }
+      .desk-footer { display: block; }
+      .mob-nav { display: none !important; }
+      .mob-header { display: none !important; }
+      .mob-search { display: none !important; }
+      .mob-cats { display: none !important; }
+      .mob-wa { display: none !important; }
+      .mob-about-cta { display: none !important; }
+      .desk-two-col { display: flex; }
+    }
+
+    @media (max-width: 767px) {
+      .desk-nav { display: none !important; }
+      .desk-hero { display: none !important; }
+      .desk-grid { display: none !important; }
+      .desk-wa-section { display: none !important; }
+      .desk-footer { display: none !important; }
+      .desk-two-col { display: none !important; }
+    }
+
+    /* Smooth scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #f0f4f8; }
+    ::-webkit-scrollbar-thumb { background: #2563EB; border-radius: 3px; }
+  `}</style>
+);
+
+
+
 // ── CONSTANTS ─────────────────────────────────────────────────────────────────
 const WA_NUMBER = "598095300356";
 
@@ -195,6 +310,8 @@ function LogoFull({ dark = false }) {
       <div>
         <div style={{fontSize:9, fontWeight:800, letterSpacing:3, color: dark?"#111":"#111", opacity:0.6}}>SERVICIOS</div>
         <div style={{fontSize:18, fontWeight:900, color: dark?"#111":"#111", letterSpacing:1, lineHeight:1}}>ServiUY</div>
+      </div>
+    </div>
       </div>
     </div>
   );
@@ -756,7 +873,126 @@ export default function App() {
   if (authPage === "signup") return <SignupPage t={t} onSignup={handleSignup} onLogin={() => setAuthPage("login")} />;
 
   return (
-    <div style={{fontFamily:"'Inter','Segoe UI',sans-serif", background:"#f5f5f7", minHeight:"100vh", maxWidth:430, margin:"0 auto", position:"relative"}}>
+    <div style={{minHeight:"100vh", background:"#f0f4f8"}}>
+      <GlobalStyles />
+
+      {/* ── DESKTOP NAVBAR ── */}
+      <nav className="desk-nav">
+        <div style={{display:"flex", alignItems:"center", gap:12}}>
+          <Logo size={36} />
+          <span style={{fontSize:20, fontWeight:900, color:"#fff", letterSpacing:1}}>ServiUY</span>
+        </div>
+        <div className="desk-nav-links">
+          <span className="desk-nav-link" onClick={() => { setPage("home"); setNavTab("home"); }}>Inicio</span>
+          <span className="desk-nav-link" onClick={() => go("about")}>¿Cómo funciona?</span>
+          <span className="desk-nav-link" onClick={() => go("search")}>Buscar</span>
+          <span className="desk-nav-link" onClick={() => go("map")}>Mapa</span>
+          <button className="desk-nav-btn" onClick={() => user ? go("dashboard") : setAuthPage("login")}>
+            {user ? `👤 ${user.name}` : "Iniciar sesión"}
+          </button>
+          <button onClick={() => setLang(l => l==="es"?"en":"es")} style={{background:"rgba(255,255,255,0.1)", border:"none", borderRadius:20, padding:"6px 14px", cursor:"pointer", color:"#fff", fontSize:13, fontWeight:700}}>
+            {lang==="es" ? "🇺🇸 EN" : "🇺🇾 ES"}
+          </button>
+        </div>
+      </nav>
+
+      {/* ── DESKTOP HERO ── */}
+      {page === "home" && (
+        <div className="desk-hero">
+          <div style={{display:"flex", justifyContent:"center", marginBottom:20}}><Logo size={64} /></div>
+          <h1>{lang==="es" ? "Encuentra profesionales de confianza en Uruguay" : "Find trusted professionals in Uruguay"}</h1>
+          <p>{lang==="es" ? "Fontaneros, electricistas, jardineros, mecánicos y más — cerca tuyo" : "Plumbers, electricians, gardeners, mechanics and more — near you"}</p>
+          <div className="desk-hero-search">
+            <input placeholder={t.search} />
+            <button onClick={() => go("search")}>{lang==="es" ? "Buscar" : "Search"} 🔍</button>
+          </div>
+          <div style={{display:"flex", gap:32, justifyContent:"center", marginTop:40, flexWrap:"wrap"}}>
+            {["✅ Gratis para clientes","🔧 +500 profesionales","⭐ Reseñas verificadas","📍 Todo Uruguay"].map((b,i) => (
+              <span key={i} style={{color:"rgba(255,255,255,0.85)", fontSize:14}}>{b}</span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── DESKTOP GRID (home only) ── */}
+      {page === "home" && (
+        <div className="desk-grid">
+          <div className="desk-grid-title">{t.serviceCategories}</div>
+          <div className="desk-grid-sub">{t.selectService}</div>
+          <div className="desk-cat-grid">
+            {CATEGORIES.map(cat => (
+              <div key={cat.id} className="desk-cat-card" style={{backgroundImage:`url(${cat.bg})`}} onClick={() => { setCat(cat); go("category"); }}>
+                <div className="desk-cat-overlay">
+                  <div style={{fontSize:28, marginBottom:6}}>{cat.icon}</div>
+                  <div className="desk-cat-name">{lang==="es"?cat.es:cat.en}</div>
+                  <div className="desk-cat-desc">{lang==="es"?cat.descEs:cat.descEn}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop featured providers */}
+          <div className="desk-grid-title" style={{marginBottom:6}}>{lang==="es" ? "Profesionales Destacados" : "Featured Professionals"}</div>
+          <div className="desk-grid-sub" style={{marginBottom:20}}>{lang==="es" ? "Los mejor calificados cerca tuyo" : "Top rated near you"}</div>
+          <div className="desk-prov-grid">
+            {PROVIDERS.slice(0,6).map(p => (
+              <div key={p.id} className="desk-prov-card" onClick={() => { setProv(p); go("profile"); }}>
+                <div style={{display:"flex", gap:12, marginBottom:12, alignItems:"flex-start"}}>
+                  <div style={{width:50, height:50, background:"#e3eaf4", borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center", fontSize:22, flexShrink:0}}>👤</div>
+                  <div style={{flex:1}}>
+                    <div style={{fontWeight:800, fontSize:15, color:"#111", marginBottom:2}}>{p.name}</div>
+                    <div style={{display:"flex", gap:2}}>{[1,2,3,4,5].map(i => <span key={i} style={{color:"#f5a623", fontSize:13}}>{i<=Math.round(p.rating)?"★":"☆"}</span>)}</div>
+                    <div style={{fontSize:12, color:"#888"}}>{p.rating} ({p.reviews} {t.reviews})</div>
+                  </div>
+                  <div style={{fontWeight:800, color:"#2563EB", fontSize:14}}>${p.price}{t.perHour}</div>
+                </div>
+                <div style={{fontSize:13, color:"#666", lineHeight:1.5, marginBottom:10}}>{lang==="es"?p.desc:p.descEn}</div>
+                <div style={{display:"flex", gap:6, flexWrap:"wrap", marginBottom:12}}>
+                  {p.emergency && <span style={{background:"#fff0f0", color:"#d00", borderRadius:20, padding:"3px 10px", fontSize:11}}>🚨 {t.emergencies}</span>}
+                  {p.nocturnal  && <span style={{background:"#f0f0ff", color:"#446", borderRadius:20, padding:"3px 10px", fontSize:11}}>🌙 {t.nocturnal}</span>}
+                </div>
+                <button onClick={(e) => { e.stopPropagation(); setProv(p); go("profile"); }} style={{width:"100%", background:"#2563EB", border:"none", borderRadius:10, padding:"10px 0", fontSize:14, fontWeight:700, cursor:"pointer", color:"#fff"}}>
+                  {t.viewProfile}
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── DESKTOP WA SECTION ── */}
+      {page === "home" && (
+        <div className="desk-wa-section">
+          <div style={{fontSize:13, fontWeight:800, color:"#2563EB", letterSpacing:2, marginBottom:8}}>CONTACTO</div>
+          <div style={{fontSize:32, fontWeight:800, color:"#fff", marginBottom:8}}>{t.waSectionTitle}</div>
+          <div style={{fontSize:16, color:"#93C5FD"}}>{t.waSectionSub}</div>
+          <div className="desk-wa-btns">
+            <button onClick={() => window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(t.waProviderMsg)}`,"_blank")} style={{background:"#25D366", border:"none", borderRadius:12, padding:"14px 28px", fontSize:15, fontWeight:800, cursor:"pointer", color:"#fff", display:"flex", alignItems:"center", gap:10}}>
+              <WAIcon /> 🔧 {t.waProviderBtn}
+            </button>
+            <button onClick={() => window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(t.waCustomerMsg)}`,"_blank")} style={{background:"rgba(255,255,255,0.1)", border:"2px solid rgba(255,255,255,0.3)", borderRadius:12, padding:"14px 28px", fontSize:15, fontWeight:800, cursor:"pointer", color:"#fff", display:"flex", alignItems:"center", gap:10}}>
+              <WAIcon color="#fff" /> ❓ {t.waCustomerBtn}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── DESKTOP FOOTER ── */}
+      {page === "home" && (
+        <div className="desk-footer">
+          <div style={{fontSize:18, fontWeight:800, color:"#fff", marginBottom:8}}>ServiUY</div>
+          <div style={{marginBottom:16}}>Conectando uruguayos con profesionales de confianza</div>
+          <div style={{display:"flex", gap:24, justifyContent:"center", marginBottom:16}}>
+            <span style={{cursor:"pointer", color:"#2563EB"}} onClick={() => go("about")}>¿Cómo funciona?</span>
+            <span style={{cursor:"pointer", color:"#2563EB"}} onClick={() => go("search")}>Buscar</span>
+            <span style={{cursor:"pointer", color:"#2563EB"}} onClick={() => setAuthPage("login")}>Registrarse</span>
+          </div>
+          <div>© 2026 ServiUY · Todos los derechos reservados</div>
+        </div>
+      )}
+
+      {/* ── MOBILE WRAPPER ── */}
+      <div style={{maxWidth:430, margin:"0 auto", position:"relative", background:"#f5f5f7", minHeight:"100vh"}}>
 
       {/* Lang toggle — fixed top right on all pages */}
       <div style={{position:"fixed", top:12, right:12, zIndex:300}}>
